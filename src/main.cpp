@@ -178,7 +178,7 @@ void randomFlicker() {
     resetLightsGracefully();
 }
 
-void opposites() {
+void seeSaw() {
     int count = 60;
     int minVal = 0;
     int maxVal = 255;
@@ -216,7 +216,7 @@ void opposites() {
 
 void loop() {
 // write your code here
-    opposites();
+    seeSaw();
     breathe();
     randomFlicker();
     dualColourTransition();
