@@ -92,11 +92,11 @@ void individualChase() {
 
 void waveChase() {
     int count = 30;
-    float currVal = 0-(PI/2);
+    float currVal = 0 - (PI / 2);
     float offsets[] = {0, PI * 0.25, PI * 0.5, PI * 0.75};
     while (true) {
         for (uint8_t i = 0; i < sizeof(pinValues); ++i) {
-            pinValues[i] = (uint8_t)((sin(currVal + offsets[i])+1.0) * (255/2.0));
+            pinValues[i] = (uint8_t) ((sin(currVal + offsets[i]) + 1.0) * (255 / 2.0));
         }
         updateLights();
         delay(10);
@@ -110,30 +110,30 @@ void waveChase() {
     resetLightsGracefully();
 }
 
-void dualColourTransition(){
+void dualColourTransition() {
     int count = 30;
-    int litPins[] = {0,1};
+    int litPins[] = {0, 1};
     int minVal = 0;
     int maxVal = 255;
-    while (count>0){
+    while (count > 0) {
         int brightnessVal = 1;
         bool direction = true;
-        while (brightnessVal != 0){
-            if(brightnessVal == maxVal || brightnessVal == minVal){
+        while (brightnessVal != 0) {
+            if (brightnessVal == maxVal || brightnessVal == minVal) {
                 direction = !direction;
             }
 
-            brightnessVal += direction? 1:-1;
+            brightnessVal += direction ? 1 : -1;
 
-            for(int i = 0; i < sizeof(litPins); ++i){
+            for (int i = 0; i < sizeof(litPins); ++i) {
                 pinValues[litPins[i]] = brightnessVal;
             }
             updateLights();
             delay(10);
         }
-        for(int i = 0; i < sizeof(pinValues); ++i){
+        for (int i = 0; i < sizeof(pinValues); ++i) {
             litPins[i] += 1;
-            if(litPins[i] == sizeof(pinValues)){
+            if (litPins[i] == sizeof(pinValues)) {
                 litPins[i] = 0;
             }
         }
@@ -142,30 +142,30 @@ void dualColourTransition(){
     resetLightsGracefully();
 }
 
-void randomFlicker(){
-    auto getNextInt = []()->int{
+void randomFlicker() {
+    auto getNextInt = []() -> int {
         return rand() % 255;
     };
 
     int count = 30;
-    while (count > 0){
-        for(int i = 0; i < 100; ++i){
+    while (count > 0) {
+        for (int i = 0; i < 100; ++i) {
             // Get next random values
             int newPinValues[sizeof(pinValues)];
-            for(int j = 0; j < sizeof(newPinValues); ++j){
+            for (int j = 0; j < sizeof(newPinValues); ++j) {
                 newPinValues[j] = getNextInt();
             }
 
             // Transition between brightness values in 4 steps for a smoother transition
             int steps = 4;
             int newPinStepSize[sizeof(pinValues)];
-            for(int j = 0; j< sizeof(newPinStepSize);++j){
+            for (int j = 0; j < sizeof(newPinStepSize); ++j) {
                 newPinStepSize[j] = newPinValues[j] - pinValues[j];
                 newPinStepSize[j] = newPinStepSize[j] / steps;
             }
 
-            for(int j = 0; j < steps; ++j){
-                for(int k = 0; k < sizeof(pinValues); ++k){
+            for (int j = 0; j < steps; ++j) {
+                for (int k = 0; k < sizeof(pinValues); ++k) {
                     pinValues[k] += newPinStepSize[k];
                 }
                 updateLights();
@@ -178,11 +178,48 @@ void randomFlicker(){
     resetLightsGracefully();
 }
 
+void opposites() {
+    int count = 60;
+    int minVal = 0;
+    int maxVal = 255;
+    bool direction = true;
+
+    auto controlLight = [&maxVal, &minVal, &direction](int pinIndex) {
+        if (pinValues[pinIndex] < maxVal && pinValues[pinIndex] > minVal) {
+            if (pinIndex % 2 == 0) {
+                pinValues[pinIndex] += direction ? 1 : -1;
+            } else {
+                pinValues[pinIndex] += direction ? -1 : 1;
+            }
+        }
+        if(pinValues[pinIndex] == 0){
+            pinValues[pinIndex] += 1;
+        }else if(pinValues[pinIndex] == 255){
+            pinValues[pinIndex] -= 1;
+        }
+    };
+
+    while (count > 0) {
+        for (int h = 0; h < 255; ++h) {
+            for (int i = 0; i < sizeof(pinValues); ++i) {
+                controlLight(i);
+            }
+            updateLights();
+            delay(10);
+        }
+        direction = !direction;
+
+        count -= 1;
+    }
+    resetLightsGracefully();
+}
+
 void loop() {
 // write your code here
+    opposites();
+    breathe();
     randomFlicker();
     dualColourTransition();
     waveChase();
     individualChase();
-    breathe();
 }
