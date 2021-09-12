@@ -193,9 +193,17 @@ void seeSaw() {
             }
         }
         if(pinValues[pinIndex] == 0){
-            pinValues[pinIndex] += 1;
+            if(pinIndex % 2 == 0){
+                pinValues[pinIndex] += direction? 1 : 0;
+            }else{
+                pinValues[pinIndex] += direction? 0 : 1;
+            }
         }else if(pinValues[pinIndex] == 255){
-            pinValues[pinIndex] -= 1;
+            if(pinIndex % 2 == 0){
+                pinValues[pinIndex] += direction? 0 : -1;
+            } else{
+                pinValues[pinIndex] += direction? -1 : 0;
+            }
         }
     };
 
