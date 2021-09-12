@@ -142,9 +142,46 @@ void dualColourTransition(){
     resetLightsGracefully();
 }
 
+void randomFlicker(){
+    auto getNextInt = []()->int{
+        return rand() % 255;
+    };
+
+    int count = 30;
+    while (count > 0){
+        for(int i = 0; i < 100; ++i){
+            // Get next random values
+            int newPinValues[sizeof(pinValues)];
+            for(int j = 0; j < sizeof(newPinValues); ++j){
+                newPinValues[j] = getNextInt();
+            }
+
+            // Transition between brightness values in 4 steps for a smoother transition
+            int steps = 4;
+            int newPinStepSize[sizeof(pinValues)];
+            for(int j = 0; j< sizeof(newPinStepSize);++j){
+                newPinStepSize[j] = newPinValues[j] - pinValues[j];
+                newPinStepSize[j] = newPinStepSize[j] / steps;
+            }
+
+            for(int j = 0; j < steps; ++j){
+                for(int k = 0; k < sizeof(pinValues); ++k){
+                    pinValues[k] += newPinStepSize[k];
+                }
+                updateLights();
+                delay(10);
+            }
+        }
+        count -= 1;
+    }
+
+    resetLightsGracefully();
+}
+
 void loop() {
 // write your code here
-dualColourTransition();
+    randomFlicker();
+    dualColourTransition();
     waveChase();
     individualChase();
     breathe();
