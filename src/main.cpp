@@ -142,6 +142,38 @@ void dualColourTransition() {
     resetLightsGracefully();
 }
 
+void individualCrawl(){
+
+    auto getPrevPinIndexInLoop = [](uint8_t currentPinIndex) -> uint8_t {
+        if(currentPinIndex > 0){
+            return currentPinIndex - 1;
+        }
+        if(currentPinIndex == 0){
+            return (uint8_t) sizeof(pinValues)-1;
+        }
+    };
+
+    int count = 60;
+
+    uint8_t currentPinIndex = 0;
+    while (count > 0){
+        for(uint8_t i = 0; i < (uint8_t)sizeof(pinValues); ++i){
+            while(pinValues[i] != 255){
+                pinValues[i] += 1;
+
+                uint8_t previousPin = getPrevPinIndexInLoop(i);
+                if(pinValues[previousPin] > 0){
+                    pinValues[previousPin] -= 1;
+                }
+                updateLights();
+                delay(10);
+            }
+        }
+        count -= 1;
+    }
+    resetLightsGracefully();
+}
+
 void randomFlicker() {
     auto getNextInt = []() -> uint8_t {
         return rand() % 255;
@@ -224,6 +256,7 @@ void seeSaw() {
 
 void loop() {
 // write your code here
+    individualCrawl();
     randomFlicker();
     seeSaw();
     breathe();
