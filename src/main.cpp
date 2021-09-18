@@ -157,7 +157,7 @@ void randomFlicker() {
             }
 
             // Transition between brightness values in 4 steps for a smoother transition
-            int steps = 4;
+            int steps = 10;
             int newPinStepSize[sizeof(pinValues)];
             for (int j = 0; j < sizeof(newPinStepSize); ++j) {
                 newPinStepSize[j] = newPinValues[j] - pinValues[j];
@@ -224,9 +224,9 @@ void seeSaw() {
 
 void loop() {
 // write your code here
+    randomFlicker();
     seeSaw();
     breathe();
-    randomFlicker();
     dualColourTransition();
     waveChase();
     individualChase();
