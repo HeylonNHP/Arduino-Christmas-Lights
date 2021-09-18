@@ -143,7 +143,7 @@ void dualColourTransition() {
 }
 
 void randomFlicker() {
-    auto getNextInt = []() -> int {
+    auto getNextInt = []() -> uint8_t {
         return rand() % 255;
     };
 
@@ -151,21 +151,21 @@ void randomFlicker() {
     while (count > 0) {
         for (int i = 0; i < 100; ++i) {
             // Get next random values
-            int newPinValues[sizeof(pinValues)];
-            for (int j = 0; j < sizeof(newPinValues); ++j) {
+            uint8_t newPinValues[sizeof(pinValues)];
+            for (uint8_t j = 0; j < (uint8_t)sizeof(newPinValues); ++j) {
                 newPinValues[j] = getNextInt();
             }
 
             // Transition between brightness values in 4 steps for a smoother transition
-            int steps = 10;
-            int newPinStepSize[sizeof(pinValues)];
-            for (int j = 0; j < sizeof(newPinStepSize); ++j) {
-                newPinStepSize[j] = newPinValues[j] - pinValues[j];
-                newPinStepSize[j] = newPinStepSize[j] / steps;
+            uint8_t steps = 10;
+            // +128 -128 max/min - With a step size (steps) greater than or equal to 2, we will never exceed this
+            int8_t newPinStepSize[sizeof(pinValues)];
+            for (uint8_t j = 0; j < (uint8_t)sizeof(newPinStepSize); ++j) {
+                newPinStepSize[j] = (int8_t)((int16_t)(newPinValues[j] - pinValues[j]) / steps);
             }
 
-            for (int j = 0; j < steps; ++j) {
-                for (int k = 0; k < sizeof(pinValues); ++k) {
+            for (uint8_t j = 0; j < steps; ++j) {
+                for (uint8_t k = 0; k < sizeof(pinValues); ++k) {
                     pinValues[k] += newPinStepSize[k];
                 }
                 updateLights();
