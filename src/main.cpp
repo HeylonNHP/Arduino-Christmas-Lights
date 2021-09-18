@@ -198,7 +198,6 @@ void individualCrawl(){
 
     int count = 60;
 
-    uint8_t currentPinIndex = 0;
     while (count > 0){
         for(uint8_t i = 0; i < (uint8_t)sizeof(pinValues); ++i){
             while(pinValues[i] != 255){
