@@ -110,6 +110,49 @@ void waveChase() {
     resetLightsGracefully();
 }
 
+void smoothIndividualChase(){
+    /* Essentially waveChase() but with my original intended output - My artistic vision fully realised! */
+
+    auto getPinValue = [](float input) -> uint8_t {
+        /* Output a rectified sine wave with a specified portion of the bottom removed with an offset value
+         * Offset should be treated as a percentage (0-1). Higher the offset, the longer the output spends at 0
+         * Input is based on values of PI */
+
+        float sineVal = sin(input);
+
+        // Get the absolute value of sine - Full Bridge Rectifier!!!
+        if(sineVal<0){
+            sineVal = 0-sineVal;
+        }
+
+        // Chop the bottom portion of the rectified sine wave off with an offset value
+        float offset = 0.6;
+        sineVal -= offset;
+        if(sineVal < 0){
+            sineVal = 0;
+        }
+
+        // Scale it back to 0-1 for full LED brightness
+        float output = sineVal/ (1-offset);
+
+        return (uint8_t)(output*255.0);
+    };
+
+    uint8_t count = 60;
+    float currentVal = 0;
+    float stepSize = (PI) / sizeof(pinValues);
+    while (currentVal<(count*PI)){
+        for(uint8_t i = 0; i < sizeof(pinValues); ++i){
+            pinValues[i] = getPinValue(currentVal+(stepSize*(i+1)));
+        }
+        // Wave movement speed
+        currentVal += 0.02;
+        updateLights();
+        delay(10);
+    }
+    resetLightsGracefully();
+}
+
 void dualColourTransition() {
     int count = 30;
     int litPins[] = {0, 1};
@@ -256,6 +299,7 @@ void seeSaw() {
 
 void loop() {
 // write your code here
+    smoothIndividualChase();
     individualCrawl();
     randomFlicker();
     seeSaw();
