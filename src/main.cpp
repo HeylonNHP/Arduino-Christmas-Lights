@@ -223,7 +223,7 @@ void randomFlicker() {
 
     int count = 30;
     while (count > 0) {
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 30; ++i) {
             // Get next random values
             uint8_t newPinValues[sizeof(pinValues)];
             for (uint8_t j = 0; j < (uint8_t)sizeof(newPinValues); ++j) {
@@ -298,12 +298,12 @@ void seeSaw() {
 
 void loop() {
 // write your code here
+    dualColourTransition();
+    waveChase();
+    individualChase();
     smoothIndividualChase();
     individualCrawl();
     randomFlicker();
     seeSaw();
     breathe();
-    dualColourTransition();
-    waveChase();
-    individualChase();
 }
