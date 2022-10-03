@@ -5,19 +5,20 @@
 #include "general_functions/general.h"
 #include "IndividualCrawl.h"
 
+uint8_t getPrevPinIndexInLoop(uint8_t currentPinIndex){
+    if (currentPinIndex > 0) {
+        return currentPinIndex - 1;
+    }
+    if (currentPinIndex == 0) {
+        return (uint8_t) channelCount() - 1;
+    }
+
+    // Error
+    return 0;
+}
+
 void individualCrawl() {
-
-    auto getPrevPinIndexInLoop = [](uint8_t currentPinIndex) -> uint8_t {
-        if (currentPinIndex > 0) {
-            return currentPinIndex - 1;
-        }
-        if (currentPinIndex == 0) {
-            return (uint8_t) channelCount() - 1;
-        }
-    };
-
-    int count = 15;
-
+    uint8_t count = 15;
     while (count > 0) {
         for (uint8_t i = 0; i < (uint8_t) channelCount(); ++i) {
             while (getChannelValue(i) != 255) {
