@@ -5,12 +5,14 @@
 #include "general_functions/general.h"
 #include "Breathe.h"
 
+const uint8_t minVal = 0;
+const uint8_t maxVal = 255;
+
 void breathe() {
     // Breathe
     int count = 30;
     bool direction = true;
-    uint8_t minVal = 0;
-    uint8_t maxVal = 255;
+
     while (count > 0) {
         bool done = false;
         while (!done) {
