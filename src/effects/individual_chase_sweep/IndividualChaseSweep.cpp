@@ -6,7 +6,7 @@
 #include "IndividualChaseSweep.h"
 
 void individualChaseSweep(){
-    int count = 500;
+    int count = 10;
 
     bool direction = true;
     float offset = PI/2;
@@ -27,8 +27,8 @@ void individualChaseSweep(){
 
         currentValue += direction? 0.05:-0.05;
 
-
         if(currentValue >= (PI+offset) || currentValue <= offset){
+            count -= 1;
             direction = !direction;
         }
 
@@ -36,6 +36,6 @@ void individualChaseSweep(){
         int max = 250;
         int min = 50;
         delay( abs(sin(currentValue) * (max-min)) + min);
-        count -= 1;
     }
+    resetLightsGracefully();
 }
