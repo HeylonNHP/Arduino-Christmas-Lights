@@ -53,3 +53,18 @@ void updateLightChannel(uint8_t channelNum, uint8_t value) {
             break;
     }
 }
+
+void resetLightsGracefully() {
+    bool allReady = false;
+    while (!allReady) {
+        bool ready = true;
+        for (int i = 0; i < channelCount(); ++i) {
+            if (getChannelValue(i) > 0) {
+                ready = false;
+                updateLightChannel(i, getChannelValue(i) - 1);
+            }
+        }
+        allReady = ready;
+        delay(10);
+    }
+}

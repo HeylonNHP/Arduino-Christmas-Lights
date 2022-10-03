@@ -12,5 +12,6 @@ void updateLightChannel(uint8_t channelNum, uint8_t value);
 uint8_t getChannelValue(uint8_t channelNum);
 uint8_t channelCount();
 uint8_t* getPins();
+void resetLightsGracefully();
 
 #endif //CHRISTMASLIGHTS_GENERAL_H

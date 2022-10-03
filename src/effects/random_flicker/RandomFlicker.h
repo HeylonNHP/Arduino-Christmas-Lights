@@ -1,0 +1,10 @@
+//
+// Created by Shiwo on 3/10/2022.
+//
+
+#ifndef CHRISTMASLIGHTS_RANDOMFLICKER_H
+#define CHRISTMASLIGHTS_RANDOMFLICKER_H
+
+void randomFlicker();
+
+#endif //CHRISTMASLIGHTS_RANDOMFLICKER_H

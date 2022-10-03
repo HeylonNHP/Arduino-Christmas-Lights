@@ -1,0 +1,10 @@
+//
+// Created by Shiwo on 3/10/2022.
+//
+
+#ifndef CHRISTMASLIGHTS_INDIVIDUALCRAWL_H
+#define CHRISTMASLIGHTS_INDIVIDUALCRAWL_H
+
+void individualCrawl();
+
+#endif //CHRISTMASLIGHTS_INDIVIDUALCRAWL_H
