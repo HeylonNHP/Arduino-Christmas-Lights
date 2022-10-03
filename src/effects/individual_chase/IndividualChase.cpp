@@ -6,10 +6,10 @@
 #include "IndividualChase.h"
 
 void individualChase() {
-    int count = 50;
+    uint8_t count = 50;
     uint8_t litLight = 0;
     while (count > 0) {
-        for (int i = 0; i < channelCount(); ++i) {
+        for (uint8_t i = 0; i < channelCount(); ++i) {
             if (i == litLight) {
                 updateLightChannel(i, 255);
             } else {
