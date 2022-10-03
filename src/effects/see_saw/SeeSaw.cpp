@@ -5,57 +5,58 @@
 #include "general_functions/general.h"
 #include "SeeSaw.h"
 
+const int minVal = 0;
+const int maxVal = 255;
+
+void controlLight(uint8_t pinIndex, bool direction){
+    if (getChannelValue(pinIndex) < maxVal && getChannelValue(pinIndex) > minVal) {
+        if (pinIndex % 2 == 0) {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? 1 : -1;
+            updateLightChannel(pinIndex,val);
+        } else {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? -1 : 1;
+            updateLightChannel(pinIndex,val);
+        }
+    }
+    if (getChannelValue(pinIndex) == 0) {
+        if (pinIndex % 2 == 0) {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? 1 : 0;
+            updateLightChannel(pinIndex,val);
+        } else {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? 0 : 1;
+            updateLightChannel(pinIndex,val);
+        }
+    } else if (getChannelValue(pinIndex) == 255) {
+        if (pinIndex % 2 == 0) {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? 0 : -1;
+            updateLightChannel(pinIndex,val);
+        } else {
+            uint8_t val = getChannelValue(pinIndex);
+            val += direction ? -1 : 0;
+            updateLightChannel(pinIndex,val);
+        }
+    }
+}
+
 void seeSaw() {
-    int count = 60;
-    int minVal = 0;
-    int maxVal = 255;
+    uint8_t count = 60U;
     bool direction = true;
 
-    auto controlLight = [&maxVal, &minVal, &direction](int pinIndex) {
-        if (getChannelValue(pinIndex) < maxVal && getChannelValue(pinIndex) > minVal) {
-            if (pinIndex % 2 == 0) {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? 1 : -1;
-                updateLightChannel(pinIndex,val);
-            } else {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? -1 : 1;
-                updateLightChannel(pinIndex,val);
+    while (count > 0U) {
+        for (uint8_t h = 0U; h < 255U; ++h) {
+            for (uint8_t i = 0U; i < channelCount(); ++i) {
+                controlLight(i, direction);
             }
-        }
-        if (getChannelValue(pinIndex) == 0) {
-            if (pinIndex % 2 == 0) {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? 1 : 0;
-                updateLightChannel(pinIndex,val);
-            } else {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? 0 : 1;
-                updateLightChannel(pinIndex,val);
-            }
-        } else if (getChannelValue(pinIndex) == 255) {
-            if (pinIndex % 2 == 0) {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? 0 : -1;
-                updateLightChannel(pinIndex,val);
-            } else {
-                uint8_t val = getChannelValue(pinIndex);
-                val += direction ? -1 : 0;
-                updateLightChannel(pinIndex,val);
-            }
-        }
-    };
-
-    while (count > 0) {
-        for (int h = 0; h < 255; ++h) {
-            for (int i = 0; i < channelCount(); ++i) {
-                controlLight(i);
-            }
-            delay(10);
+            delay(10U);
         }
         direction = !direction;
 
-        count -= 1;
+        count -= 1U;
     }
     resetLightsGracefully();
 }
