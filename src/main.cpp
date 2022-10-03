@@ -9,6 +9,7 @@
 #include "effects/individual_crawl/IndividualCrawl.h"
 #include "effects/random_flicker/RandomFlicker.h"
 #include "effects/see_saw/SeeSaw.h"
+#include "effects/individual_chase_sweep/IndividualChaseSweep.h"
 
 void setup() {
 // write your initialization code here
@@ -24,6 +25,7 @@ void setup() {
 
 void loop() {
 // write your code here
+    individualChaseSweep();
     dualColourTransition();
     waveChase();
     individualChase();
